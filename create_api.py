@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import joblib
 import numpy as np
 from pydantic import BaseModel
+import uvicorn
 
 class Item(BaseModel):
     size_val: int
@@ -9,8 +10,7 @@ class Item(BaseModel):
     garden_val: bool
 
 
-model = joblib.load("regression.joblib") 
-
+model = joblib.load("regression.joblib")
 app = FastAPI()
 
 @app.get("/predict")
@@ -24,3 +24,4 @@ async def prediction(item: Item):
     return {
         "predicted price": {prediction[0]}
     }
+uvicorn.run(app, host="0.0.0.0", port=8023)
